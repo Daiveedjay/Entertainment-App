@@ -1,0 +1,217 @@
+.login__section {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: var(--primary-color);
+  width: 40rem;
+  padding: 2rem 3rem;
+  padding-bottom: 2.5rem;
+  border-radius: 10px;
+}
+
+h1 {
+  align-self: center;
+  font-size: 4rem;
+  font-weight: 400;
+}
+
+.email,
+.password,
+.display__name {
+  position: relative;
+}
+.email span,
+.password span,
+.display__name span {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  transition: all ease-in 0.2s;
+}
+
+.email--input,
+.password--input,
+.display--input {
+  padding: 1.5rem 2rem;
+  padding-left: 0;
+  border: none;
+  border-bottom: 1px solid var(--primary-light);
+  background-color: transparent;
+  width: 100%;
+  transition: all ease-in 0.2s;
+  font-size: 1.75rem;
+  color: var(--primary-light);
+}
+
+.email--input:focus,
+.password--input:focus,
+.display--input:focus {
+  outline: none;
+  caret-color: #fff;
+  /* border: none; */
+}
+.email--input:focus ~ span,
+.password--input:focus ~ span,
+.display--input:focus ~ span,
+.email--input.has-value ~ span,
+.password--input.has-value ~ span,
+.display--input.has-value ~ span {
+  transform: translateY(0);
+  top: -10px;
+  font-size: 1rem;
+  left: 0;
+  color: var(--sub-text-color);
+}
+
+.email--input.has-value ~ span,
+.password--input.has-value ~ span {
+  transform: translateY(0);
+  top: -10px;
+  font-size: 1rem;
+  left: 0;
+  color: var(--sub-text-color);
+}
+
+.toggle-visibility {
+  width: 2rem;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.submit {
+  padding: 0.75rem 2rem;
+  font-size: 2.5rem;
+  align-self: flex-start;
+  margin-top: 2rem;
+  background: none;
+  color: var(--primary-light);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  transition: all ease-in 0.2s;
+}
+
+.submit span {
+  position: absolute;
+  display: block;
+}
+
+.submit:hover {
+  background: var(--primary-light);
+  color: var(--primary-color);
+  border-radius: 5px;
+}
+
+.submit:hover span {
+  visibility: hidden;
+}
+
+.submit span:nth-child(1) {
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #fff);
+  animation: btn-anim1 3s linear infinite;
+}
+
+@keyframes btn-anim1 {
+  0% {
+    left: -100%;
+  }
+  50%,
+  100% {
+    left: 100%;
+  }
+}
+
+.submit span:nth-child(2) {
+  top: -100%;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, #fff);
+  animation: btn-anim2 3s linear infinite;
+  animation-delay: 0.75s;
+}
+
+@keyframes btn-anim2 {
+  0% {
+    top: -100%;
+  }
+  50%,
+  100% {
+    top: 100%;
+  }
+}
+
+.submit span:nth-child(3) {
+  bottom: 0;
+  right: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(270deg, transparent, #fff);
+  animation: btn-anim3 3s linear infinite;
+  animation-delay: 1.5s;
+}
+
+@keyframes btn-anim3 {
+  0% {
+    right: -100%;
+  }
+  50%,
+  100% {
+    right: 100%;
+  }
+}
+
+.submit span:nth-child(4) {
+  bottom: -100%;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(360deg, transparent, #fff);
+  animation: btn-anim4 3s linear infinite;
+  animation-delay: 2.25s;
+}
+
+@keyframes btn-anim4 {
+  0% {
+    bottom: -100%;
+  }
+  50%,
+  100% {
+    bottom: 100%;
+  }
+}
+
+.sign-in-route {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  color: var(--sub-text-color);
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  /* border: 2px solid red; */
+  justify-content: center;
+}
+
+.sign-in-route a {
+  color: var(--primary-light);
+  text-decoration: none;
+  font-weight: 600;
+  /* display: inline-block; */
+  /* padding: 1rem; */
+}

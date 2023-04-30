@@ -1,0 +1,11 @@
+.App {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  gap: 3rem;
+  padding-top: 2rem;
+  padding-left: 2rem;
+  color: var(--primary-light);
+  background: var(--background-color);
+  position: relative;
+}

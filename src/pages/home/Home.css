@@ -1,0 +1,231 @@
+/* .section__layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  gap: 3rem;
+  padding-top: 2rem;
+  padding-left: 2rem;
+  color: #fff;
+  background: var(--background-color);
+} */
+
+/* .trending__section {
+  position: relative;
+} */
+
+.trending__section .header--spacing,
+.movies__section .header--spacing,
+.series__section .header--spacing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+}
+.display--name {
+  color: var(--sub-text-color);
+
+  /* position: absolute;
+  top: 0;
+  right: 0; */
+}
+
+.trending__slider {
+  display: flex;
+  overflow-x: scroll;
+  width: 100%;
+  scroll-behavior: smooth;
+  padding-bottom: 0.75rem;
+}
+.trending__slider::-webkit-scrollbar {
+  width: 8px;
+  height: 5px;
+}
+.trending__slider::-webkit-scrollbar-thumb {
+  background: #5a698f;
+  border-radius: 5px;
+}
+.trending__slider::-webkit-scrollbar-track {
+  background: transparent;
+}
+.slider__item {
+  flex-shrink: 0;
+  margin-right: 1rem;
+  flex-basis: 45rem;
+  max-height: 25rem;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all ease-in 0.3s;
+  cursor: pointer;
+}
+
+.slider__item:hover .play__icon--container {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0.25s;
+}
+
+.slider--image {
+  width: 100%;
+  filter: brightness(80%);
+  transition: all ease-in 0.3s;
+}
+
+.slider__item:hover .slider--image {
+  transform: scale(1.1);
+  filter: brightness(50%);
+}
+
+.slider__details__container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.slider__details,
+.utility__item--details {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+  opacity: 75%;
+  gap: 1.5rem;
+}
+
+.slider__details li:first-child {
+  list-style: none;
+}
+
+.slider__category {
+  display: flex;
+  align-items: center;
+}
+
+.slider__category img,
+.utility__item--details img {
+  scale: 0.6;
+}
+
+.bookmark__icon--container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.1rem;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.bookmark__icon {
+  width: 1rem;
+}
+
+.play__icon--container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: rgba(121, 127, 139, 0.8);
+  padding: 1rem 2rem;
+  border-radius: 30px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all ease-in 0.3s;
+}
+.play__icon--container span {
+  font-size: 1.7rem;
+}
+
+.utility__items--container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+  gap: 3rem;
+  padding-right: 3rem;
+  position: relative;
+  padding-bottom: 7.5rem;
+}
+
+.utility__item {
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.utility__image {
+  width: 100%;
+  border-radius: 10px;
+  transition: all ease-in 0.3s;
+  overflow: hidden;
+  filter: brightness(80%);
+}
+
+.utility__image--container:hover .utility__image {
+  filter: brightness(50%);
+}
+
+.utility__item--details {
+  display: flex;
+  align-items: center;
+}
+
+.utility__item--details span {
+  display: flex;
+  align-items: center;
+}
+
+.show--more,
+.show--more:is(:visited, :link) {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 2rem;
+  border-radius: 20px;
+  border: none;
+  font-size: 1.8rem;
+  transition: all ease-in-out 0.5s;
+}
+
+.show--more:hover {
+  transform: translate(-50%, -3px);
+}
+
+.show--more:before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid red; */
+  border-radius: 20px;
+  background: #fff;
+  z-index: -1;
+  transition: all ease-in-out 0.5s;
+}
+
+.show--more:hover::before {
+  transform: scale(1.5);
+  opacity: 0;
+}
+
+.utility__image--container .play__icon--container {
+  /* border: 2px solid rebeccapurple; */
+  transform: translate(-50%, -90%);
+}
+.utility__image--container:hover .play__icon--container {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0.25s;
+}
+
+.recommended__section .large--text {
+  padding: 2rem;
+}

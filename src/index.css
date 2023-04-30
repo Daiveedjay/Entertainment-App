@@ -1,0 +1,87 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+:root {
+  --font-family-light: "Outfit-Light";
+  --font-family-medium: "Outfit-Medium";
+  --background-color: #10141f;
+  --primary-color: #161d2f;
+  --sub-text-color: #999999;
+  --primary-light: #fff;
+}
+
+html {
+  font-size: 62.5%; /* 10px per rem  */
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #fc4747;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+
+@font-face {
+  font-family: "Outfit-Light";
+  src: url("/public/fonts/Outfit-Light.ttf") format("truetype"),
+    url("/public/fonts/Outfit-Light.ttf") format("truetype");
+  font-weight: light;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Outfit-Medium";
+  src: url("/public/fonts/Outfit-Medium.ttf") format("truetype"),
+    url("/public/fonts/Outfit-Medium.ttf") format("truetype");
+  font-weight: medium;
+  font-style: normal;
+}
+
+body {
+  box-sizing: border-box;
+  font-family: var(--font-family-light);
+}
+
+button {
+  font-family: var(--font-family-light);
+  cursor: pointer;
+}
+
+.large--text {
+  font-size: 3rem;
+  font-weight: 300;
+}
+.medium--text {
+  font-size: 2.25rem;
+  letter-spacing: 0.75px;
+  font-family: var(--font-family-medium);
+  font-weight: 400;
+}
+.small--text {
+  font-size: 1.8rem;
+  font-family: var(--font-family-light);
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.section--spacing {
+  margin: 2rem 0;
+}
+.header--spacing {
+  padding: 2rem 0;
+}
+input {
+  font-family: var(--font-family-light);
+}
+input::placeholder {
+  font-family: var(--font-family-light);
+  font-size: 1.8rem;
+}
