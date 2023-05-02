@@ -1,38 +1,47 @@
 import Search from "../../components/Search";
 import "./Bookmarks.css";
-// import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
-
+import bookmarkData from "../../data.json";
 import movieIcon from "../../../public/icon-nav-movies-light.svg";
 import seriesIcon from "../../../public/icon-nav-tv-series-light.svg";
 import playIcon from "../../../public/icon-play.svg";
 import bookmarkIcon from "../../../public/icon-bookmark-full.svg";
 
 export default function Bookmarks() {
+  // bookmarkData.forEach((data) => {
+  //   console.log(data);
+  // });
   // const { user } = useAuthContext();
   const { deleteDocument } = useFirestore("bookmarks");
   const { documents, error } = useCollection("bookmarks");
+
+  // console.log(documents);
+
   return (
     <div>
       <Search />
       {/* {!documents && documents.length > 0 && <div>No Bookmarks to display</div>} */}
-      {documents &&
+      {/* {documents &&
         documents.filter((document) => document.category === "Movie").length >
           0 && (
           <div className="large--text header--spacing">Bookmarked Movies</div>
-        )}
+        )} */}
       {error && <div>{error}</div>}
+      {/* TODO */}
       <div className="bookmarks__items--container">
         {documents &&
-          documents
-            .filter((document) => document.category === "Movie")
-            .map((document) => (
-              <div className="utility__item" key={document.id}>
+          documents.map((document) => {
+            document = bookmarkData.find(
+              (media) => media.id == document.dataID
+            );
+
+            return (
+              <div className="utility__item" key={document.title}>
                 <div className="utility__image--container">
                   <img
                     className="utility__image"
-                    src={document.imageURL}
+                    src={document.thumbnail[1]}
                     alt={""}
                   />
                   <div className="play__icon--container">
@@ -63,9 +72,10 @@ export default function Bookmarks() {
                   <img className="bookmark__icon" src={bookmarkIcon} alt="" />
                 </div>
               </div>
-            ))}
+            );
+          })}
       </div>
-      {documents &&
+      {/* {documents &&
         documents.filter((document) => document.category === "TV Series")
           .length > 0 && (
           <div className="large--text header--spacing">
@@ -114,7 +124,7 @@ export default function Bookmarks() {
                 </div>
               </div>
             ))}
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -15,7 +15,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 export default function Home() {
-  const { addDocumentWithImage, response } = useFirestore("bookmarks");
+  const { bookmarkMedia, response } = useFirestore("bookmarks");
 
   const [bookmarkedItems, setBookmarkedItems] = useState([]);
 
@@ -29,15 +29,19 @@ export default function Home() {
         const bookmarksQuery = query(
           collection(db, "bookmarks"),
           where("uid", "==", user.uid)
+          // where("dataID", "==", dataID)
         );
 
         const bookmarksSnapshot = await getDocs(bookmarksQuery);
 
         const existingBookmarks = bookmarksSnapshot.docs.map((doc) => {
-          return { id: doc.id, ...doc.data() };
+          console.log(doc);
+          return { ...doc.data() };
         });
-
-        setBookmarkedItems(existingBookmarks.map((bookmark) => bookmark.id));
+        console.log(existingBookmarks);
+        setBookmarkedItems(
+          existingBookmarks.map((bookmark) => bookmark.dataID)
+        );
       };
 
       fetchBookmarks();
@@ -46,33 +50,14 @@ export default function Home() {
 
   const addBookmark = async (dataItem) => {
     if (!bookmarkedItems.includes(dataItem.id)) {
-      const title = dataItem.title;
-      const category = dataItem.category;
-      const year = dataItem.year;
-      const rating = dataItem.rating;
-      const uid = user.uid;
-      const bookmarkImg = dataItem.thumbnail[1];
       const dataID = dataItem.id;
+
       console.log(dataID);
 
-      const response = await fetch(bookmarkImg);
-      const blob = await response.blob();
-      const fileType = blob.type;
-      const imageFile = new File([blob], `${title}-${category}.jpg`, {
-        type: fileType,
-      });
-
-      await addDocumentWithImage(
-        {
-          uid,
-          title,
-          category,
-          year,
-          rating,
-        },
-        imageFile
-      );
+      await bookmarkMedia(dataID, user.uid);
       setBookmarkedItems([...bookmarkedItems, dataItem.id]);
+
+      setBookmarkedItems((prevBookmark) => [...prevBookmark, bookmarkedItems]);
     }
   };
 
@@ -126,7 +111,7 @@ export default function Home() {
                     <img
                       className="bookmark__icon"
                       src={
-                        bookmarkedItems.includes(dataItem.id)
+                        bookmarkedItems.includes(bookmarkedItems.dataID)
                           ? bookmarkDone
                           : bookmarkIcon
                       }
