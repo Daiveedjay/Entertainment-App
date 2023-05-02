@@ -5,18 +5,24 @@ import hidePassword from "../../../public/visibility-on.svg";
 import "./Signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useSignup } from "../../hooks/useSignup";
+import { fetchSignInMethodsForEmail } from "firebase/auth";
+import { auth } from "../../firebase/config";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { error, signup } = useSignup();
+  const { error, isPending, signup } = useSignup();
   const [displayPassword, setDisplayPassword] = useState(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(null);
   const [displayName, setDisplayName] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
   const [thumbnailError, setThumbnailError] = useState(null);
+  // console.log(thumbnail);
+
+  const [emailError, setEmailError] = useState(null);
 
   const handleFileChange = (e) => {
     setThumbnail(null);
@@ -40,7 +46,6 @@ export default function Signup() {
 
     setThumbnailError(null);
     setThumbnail(selected);
-    console.log("Thumbnail Updated");
   };
 
   const togglePasswordVisibility = () => {
@@ -49,9 +54,34 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    signup(email, password);
-    navigate("/");
-    console.log(email, password);
+    console.log(email, password, displayName);
+    console.log("User thumbnail in useSignUp", thumbnail);
+
+    try {
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      if (methods.length > 0) {
+        setEmailError("This email is already in use");
+        setTimeout(() => {
+          setEmailError(null);
+        }, 3000);
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setDisplayName("");
+        return;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+    if (password === confirmPassword) {
+      signup(email, password, displayName, thumbnail).then(() => navigate("/"));
+    } else {
+      setPasswordError("Passwords do not match");
+      setTimeout(() => {
+        setPasswordError(null);
+      }, 3000);
+    }
 
     setEmail("");
     setPassword("");
@@ -93,9 +123,10 @@ export default function Signup() {
           className={`password--input ${confirmPassword ? "has-value" : ""}`}
           type={displayPassword ? "text" : "password"}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          // required
+          required
           value={confirmPassword}
         />
+
         <span>Confirm Password</span>
         <img
           onClick={togglePasswordVisibility}
@@ -108,7 +139,7 @@ export default function Signup() {
       <div className="display__name">
         <input
           className={`display--input ${displayName ? "has-value" : ""}`}
-          // required
+          required
           type="text"
           onChange={(e) => setDisplayName(e.target.value)}
           value={displayName}
@@ -123,7 +154,7 @@ export default function Signup() {
           type="file"
           src={showPassword}
           alt="Avatar"
-          // required
+          required
         />
         {thumbnailError && <p className="error">{thumbnailError}</p>}
       </div>
@@ -134,7 +165,42 @@ export default function Signup() {
         <span></span>
         Sign up
       </button>
-      {error && <p>{error}</p>}
+      {isPending && (
+        <div className="loading__container">
+          <div className="loading">
+            <div className=" boxes">
+              <div className="box">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              <div className="box">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              <div className="box">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              <div className="box">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {error && <p className="error">{error}</p>}
+      {passwordError && <p className="error">{passwordError}</p>}
+
+      {emailError && <p className="error email--error">{emailError}</p>}
       <div className="sign-in-route">
         <p> Already have an acount? </p>
         <Link to="/login">Login here </Link>

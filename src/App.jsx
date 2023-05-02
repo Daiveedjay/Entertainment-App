@@ -95,15 +95,51 @@ import { useAuthContext } from "./hooks/useAuthContext";
 function App() {
   const { user, authIsReady } = useAuthContext();
 
-  if (!authIsReady) return <div>Loading...</div>;
+  // if (!authIsReady)
+  //   return (
+  //     <div className="loading__container">
+  //       <div className="loading">
+  //         <div className=" boxes">
+  //           <div className="box">
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //           </div>
+  //           <div className="box">
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //           </div>
+  //           <div className="box">
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //           </div>
+  //           <div className="box">
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //             <div></div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <LocationProvider>
-          <AppRoutes user={user} />
-        </LocationProvider>
-      </BrowserRouter>
+      {authIsReady && (
+        <>
+          <BrowserRouter>
+            <LocationProvider>
+              <AppRoutes user={user} />
+            </LocationProvider>
+          </BrowserRouter>
+        </>
+      )}
     </div>
   );
 }

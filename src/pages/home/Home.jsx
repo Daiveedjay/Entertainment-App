@@ -2,34 +2,81 @@ import Search from "../../components/Search";
 import "./Home.css";
 import data from "../../data.json";
 import bookmarkIcon from "../../../public/icon-bookmark-empty.svg";
+import bookmarkDone from "../../../public/icon-bookmark-full.svg";
 import movieIcon from "../../../public/icon-nav-movies-light.svg";
 import seriesIcon from "../../../public/icon-nav-tv-series-light.svg";
 import playIcon from "../../../public/icon-play.svg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-// import { collection, addDoc } from "firebase/firestore";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useFirestore } from "../../hooks/useFirestore";
+
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/config";
 
 export default function Home() {
+  const { addDocumentWithImage, response } = useFirestore("bookmarks");
+
+  const [bookmarkedItems, setBookmarkedItems] = useState([]);
+
   const [showMore, setShowMore] = useState(false);
-  const [title, setTitle] = useState("");
-  const [thumbnail, setThumbnail] = useState(null);
-  const [category, setCategory] = useState("");
-  const [year, setYear] = useState("");
-  const [rating, setRating] = useState("");
+
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    if (user) {
+      const fetchBookmarks = async () => {
+        const bookmarksQuery = query(
+          collection(db, "bookmarks"),
+          where("uid", "==", user.uid)
+        );
+
+        const bookmarksSnapshot = await getDocs(bookmarksQuery);
+
+        const existingBookmarks = bookmarksSnapshot.docs.map((doc) => {
+          return { id: doc.id, ...doc.data() };
+        });
+
+        setBookmarkedItems(existingBookmarks.map((bookmark) => bookmark.id));
+      };
+
+      fetchBookmarks();
+    }
+  }, [user]);
 
   const addBookmark = async (dataItem) => {
-    setTitle(dataItem.title);
-    setThumbnail(dataItem.thumbnail[0]);
-    setCategory(dataItem.category);
-    setYear(dataItem.year);
-    setRating(dataItem.rating);
+    if (!bookmarkedItems.includes(dataItem.id)) {
+      const title = dataItem.title;
+      const category = dataItem.category;
+      const year = dataItem.year;
+      const rating = dataItem.rating;
+      const uid = user.uid;
+      const bookmarkImg = dataItem.thumbnail[1];
+      const dataID = dataItem.id;
+      console.log(dataID);
 
-    console.log("Title:", title);
-    console.log("Thumbnail:", thumbnail);
-    console.log("Category:", category);
-    console.log("Year:", year);
-    console.log("Rating:", rating);
+      const response = await fetch(bookmarkImg);
+      const blob = await response.blob();
+      const fileType = blob.type;
+      const imageFile = new File([blob], `${title}-${category}.jpg`, {
+        type: fileType,
+      });
+
+      await addDocumentWithImage(
+        {
+          uid,
+          title,
+          category,
+          year,
+          rating,
+        },
+        imageFile
+      );
+      setBookmarkedItems([...bookmarkedItems, dataItem.id]);
+    }
   };
+
+  console.log(response);
 
   return (
     <div>
@@ -38,7 +85,7 @@ export default function Home() {
         <div className="header--spacing">
           <h2 className=" large--text">Trending</h2>
           <h2 className="large--text display--name">
-            What&apos;s good, Daiveed ?
+            What&apos;s good, {user.displayName} ?
           </h2>
         </div>
 
@@ -50,7 +97,7 @@ export default function Home() {
                 <div className="slider__item" key={index}>
                   <img
                     className="slider--image"
-                    src={dataItem.thumbnail[0]}
+                    src={dataItem.thumbnail[1]}
                     alt=""
                   />
                   <div className="slider__details__container">
@@ -76,7 +123,15 @@ export default function Home() {
                     className="bookmark__icon--container"
                     onClick={() => addBookmark(dataItem)}
                   >
-                    <img className="bookmark__icon" src={bookmarkIcon} alt="" />
+                    <img
+                      className="bookmark__icon"
+                      src={
+                        bookmarkedItems.includes(dataItem.id)
+                          ? bookmarkDone
+                          : bookmarkIcon
+                      }
+                      alt=""
+                    />
                   </div>
                   <div className="play__icon--container">
                     <img className="play__icon" src={playIcon} alt="" />

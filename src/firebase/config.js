@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCyC8cHUwxohc6C9jdJihc8Q8vbvRQ0t_0",
   authDomain: "react-entertainment-app-7f977.firebaseapp.com",
@@ -16,7 +18,10 @@ initializeApp(firebaseConfig);
 // Initialize Firestore
 const db = getFirestore();
 
-// Initialize Firestore
+// Initialize storage
+const storage = getStorage();
+
+// Initialize Authentication
 const auth = getAuth();
 
-export { db, auth };
+export { db, auth, storage };

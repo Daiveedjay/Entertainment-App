@@ -6,8 +6,38 @@ import bookmarkIcon from "../../../public/icon-bookmark-empty.svg";
 import movieIcon from "../../../public/icon-nav-movies-light.svg";
 import seriesIcon from "../../../public/icon-nav-tv-series-light.svg";
 import playIcon from "../../../public/icon-play.svg";
-
+// import { useState } from "react";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useFirestore } from "../../hooks/useFirestore";
 export default function Movies() {
+  const { addDocumentWithImage } = useFirestore("bookmarks");
+  const { user } = useAuthContext();
+  const addBookmark = async (dataItem) => {
+    const title = dataItem.title;
+    const category = dataItem.category;
+    const year = dataItem.year;
+    const rating = dataItem.rating;
+    const uid = user.uid;
+    const bookmarkImg = dataItem.thumbnail[1];
+
+    const response = await fetch(bookmarkImg);
+    const blob = await response.blob();
+    const fileType = blob.type;
+    const imageFile = new File([blob], `${title}-${category}.jpg`, {
+      type: fileType,
+    });
+
+    await addDocumentWithImage(
+      {
+        uid,
+        title,
+        category,
+        year,
+        rating,
+      },
+      imageFile
+    );
+  };
   return (
     <div>
       <Search />
@@ -15,7 +45,7 @@ export default function Movies() {
         <div className="header--spacing">
           <h2 className=" large--text">Movies</h2>
           <h2 className="large--text display--name">
-            What&apos;s good, Daiveed ?
+            What&apos;s good, {user.displayName} ?
           </h2>
         </div>
 
@@ -53,7 +83,10 @@ export default function Movies() {
                   <div className="utility__item--title small--text">
                     {dataItem.title}
                   </div>
-                  <div className="bookmark__icon--container">
+                  <div
+                    onClick={() => addBookmark(dataItem)}
+                    className="bookmark__icon--container"
+                  >
                     <img className="bookmark__icon" src={bookmarkIcon} alt="" />
                   </div>
                 </div>

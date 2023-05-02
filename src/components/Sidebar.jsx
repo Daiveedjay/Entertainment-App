@@ -14,7 +14,10 @@ import { useState } from "react";
 import { useLogout } from "../hooks/useLogout";
 import { useNavigate } from "react-router-dom";
 
+import { useAuthContext } from "../hooks/useAuthContext";
+
 export default function Sidebar() {
+  const { user } = useAuthContext();
   const { logout } = useLogout();
 
   const navigate = useNavigate();
@@ -67,7 +70,7 @@ export default function Sidebar() {
       </div>
 
       <div className="account__image">
-        <img src="" alt="" />
+        <img src={user.photoURL} alt="" />
       </div>
     </aside>
   );

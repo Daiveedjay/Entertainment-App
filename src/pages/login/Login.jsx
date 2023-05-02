@@ -3,11 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import showPassword from "../../../public/visibility-off.svg";
 import hidePassword from "../../../public/visibility-on.svg";
 import { useState } from "react";
-
+// import { motion } from "framer-motion";
 import { useLogin } from "../../hooks/useLogin";
 
 export default function Login() {
-  const { error, login } = useLogin();
+  const { isPending, error, login } = useLogin();
 
   const navigate = useNavigate();
   const [displayPassword, setDisplayPassword] = useState(null);
@@ -21,7 +21,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = login(email, password);
+    const success = await login(email, password);
 
     if (success) {
       navigate("/");
@@ -62,7 +62,38 @@ export default function Login() {
         <span></span>
         Login
       </button>
-
+      {isPending && (
+        <div className="loading__container">
+          <div className="loading">
+            <div className=" boxes">
+              <div className="box">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              <div className="box">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              <div className="box">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              <div className="box">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {error && <p>{error}</p>}
       <div className="sign-in-route">
         <p> Don&apos;t have an acount? </p>
