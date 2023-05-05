@@ -65,41 +65,8 @@ export const useFirestore = (collectionName) => {
     }
   };
 
-  // Add new document
-  const addDocument = async (docData) => {
-    dispatch({ type: "IS_PENDING" });
-
-    try {
-      const addedDocument = await addDoc(ref, { ...docData });
-      dispatchIfNotCancelled({
-        type: "ADDED_DOCUMENT",
-        payload: addedDocument,
-      });
-    } catch (error) {
-      dispatchIfNotCancelled({
-        type: "ERROR",
-        payload: error.message,
-      });
-    }
-  };
-
-  // Delete new document
-  const deleteDocument = async (id) => {
-    dispatch({ type: "IS_PENDING" });
-
-    try {
-      await deleteDoc(doc(ref, id));
-      dispatchIfNotCancelled({
-        type: "DELETED_DOCUMENT",
-      });
-    } catch (error) {
-      dispatchIfNotCancelled({ type: "ERROR", payload: "Could not delete" });
-    }
-  };
-
-  // Add new document with image
-
-  const bookmarkMedia = async (dataID, uid) => {
+  // Add new document reference
+  const bookmarkMedia = async (dataID, dataCategory, uid) => {
     dispatch({ type: "IS_PENDING" });
     try {
       // Check for existing bookmark
@@ -112,7 +79,7 @@ export const useFirestore = (collectionName) => {
 
       if (existingBookmarkSnapshot.empty) {
         // Add document if the bookmark doesn't exist
-        const addedDocument = await addDoc(ref, { dataID, uid });
+        const addedDocument = await addDoc(ref, { dataID, dataCategory, uid });
         dispatchIfNotCancelled({
           type: "ADDED_DOCUMENT",
           payload: addedDocument,
@@ -131,11 +98,39 @@ export const useFirestore = (collectionName) => {
     }
   };
 
+  // Delete new document
+  const deleteBookmark = async (dataID) => {
+    dispatch({ type: "IS_PENDING" });
+
+    try {
+      // Find the document with the given dataID
+      const deleteBookmarkQuery = query(ref, where("dataID", "==", dataID));
+
+      const deleteBookmarkSnapshot = await getDocs(deleteBookmarkQuery);
+
+      if (!deleteBookmarkSnapshot.empty) {
+        // Delete the document if found
+        const docID = deleteBookmarkSnapshot.docs[0].id;
+        await deleteDoc(doc(ref, docID));
+        dispatchIfNotCancelled({
+          type: "DELETED_DOCUMENT",
+        });
+      } else {
+        dispatchIfNotCancelled({
+          type: "ERROR",
+          payload: "Bookmark not found",
+        });
+      }
+    } catch (error) {
+      dispatchIfNotCancelled({ type: "ERROR", payload: "Could not delete" });
+    }
+  };
+
   useEffect(() => {
     return () => {
       setIsCancelled(true);
     };
   }, []);
 
-  return { addDocument, deleteDocument, bookmarkMedia, response };
+  return { deleteBookmark, bookmarkMedia, response };
 };

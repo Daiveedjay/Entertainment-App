@@ -3,38 +3,55 @@ import "./Bookmarks.css";
 import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
 import bookmarkData from "../../data.json";
-import movieIcon from "../../../public/icon-nav-movies-light.svg";
-import seriesIcon from "../../../public/icon-nav-tv-series-light.svg";
-import playIcon from "../../../public/icon-play.svg";
-import bookmarkIcon from "../../../public/icon-bookmark-full.svg";
+import movieIcon from "../../assests/icon-nav-movies-light.svg";
+import seriesIcon from "../../assests/icon-nav-tv-series-light.svg";
+import playIcon from "../../assests/icon-play.svg";
+import bookmarkIcon from "../../assests/icon-bookmark-full.svg";
 
 export default function Bookmarks() {
-  // bookmarkData.forEach((data) => {
-  //   console.log(data);
-  // });
-  // const { user } = useAuthContext();
-  const { deleteDocument } = useFirestore("bookmarks");
+  const { deleteBookmark } = useFirestore("bookmarks");
   const { documents, error } = useCollection("bookmarks");
+  const tvSeriesData = bookmarkData.filter(
+    (media) => media.category === "TV Series"
+  );
 
-  // console.log(documents);
+  const movieData = bookmarkData.filter((media) => media.category === "Movie");
+
+  const hasTVSeries =
+    documents &&
+    documents.some((doc) => {
+      const media = bookmarkData.find((m) => m.id == doc.dataID);
+      return media && media.category === "TV Series";
+    });
+  const hasMovie =
+    documents &&
+    documents.some((doc) => {
+      const media = bookmarkData.find((m) => m.id == doc.dataID);
+      return media && media.category === "Movie";
+    });
 
   return (
     <div>
       <Search />
-      {/* {!documents && documents.length > 0 && <div>No Bookmarks to display</div>} */}
-      {/* {documents &&
-        documents.filter((document) => document.category === "Movie").length >
-          0 && (
-          <div className="large--text header--spacing">Bookmarked Movies</div>
-        )} */}
+
       {error && <div>{error}</div>}
       {/* TODO */}
+      {!hasMovie && !hasTVSeries && (
+        <div className="large--text header--spacing">No Bookmarks yet...</div>
+      )}
+      {hasMovie && <div className="large--text header--spacing">Movies</div>}
       <div className="bookmarks__items--container">
         {documents &&
           documents.map((document) => {
-            document = bookmarkData.find(
+            const foundDocument = movieData.find(
               (media) => media.id == document.dataID
             );
+
+            if (!foundDocument) {
+              return null;
+            }
+
+            document = foundDocument;
 
             return (
               <div className="utility__item" key={document.title}>
@@ -66,7 +83,7 @@ export default function Bookmarks() {
                   {document.title}
                 </div>
                 <div
-                  onClick={() => deleteDocument(document.id)}
+                  onClick={() => deleteBookmark(document.id)}
                   className="bookmark__icon--container"
                 >
                   <img className="bookmark__icon" src={bookmarkIcon} alt="" />
@@ -75,24 +92,29 @@ export default function Bookmarks() {
             );
           })}
       </div>
-      {/* {documents &&
-        documents.filter((document) => document.category === "TV Series")
-          .length > 0 && (
-          <div className="large--text header--spacing">
-            Bookmarked TV series
-          </div>
-        )}
+      {hasTVSeries && (
+        <div className="large--text header--spacing">TV Series</div>
+      )}
 
       <div className="bookmarks__items--container">
         {documents &&
-          documents
-            .filter((document) => document.category === "TV Series")
-            .map((document) => (
-              <div className="utility__item" key={document.id}>
+          documents.map((document) => {
+            const foundDocument = tvSeriesData.find(
+              (media) => media.id == document.dataID
+            );
+
+            if (!foundDocument) {
+              return null;
+            }
+
+            document = foundDocument;
+
+            return (
+              <div className="utility__item" key={document.title}>
                 <div className="utility__image--container">
                   <img
                     className="utility__image"
-                    src={document.imageURL}
+                    src={document.thumbnail[1]}
                     alt={""}
                   />
                   <div className="play__icon--container">
@@ -117,14 +139,15 @@ export default function Bookmarks() {
                   {document.title}
                 </div>
                 <div
-                  onClick={() => deleteDocument(document.id)}
+                  onClick={() => deleteBookmark(document.id)}
                   className="bookmark__icon--container"
                 >
                   <img className="bookmark__icon" src={bookmarkIcon} alt="" />
                 </div>
               </div>
-            ))}
-      </div> */}
+            );
+          })}
+      </div>
     </div>
   );
 }

@@ -1,33 +1,3 @@
-// import { useState } from "react";
-
-// import { auth } from "../firebase/config";
-// import { createUserWithEmailAndPassword } from "firebase/auth";
-// import { useAuthContext } from "./useAuthContext";
-// export const useSignup = () => {
-//   const [error, setError] = useState(null);
-//   const [isPending, setIsPending] = useState(false); // Add isPending state
-
-//   const { dispatch } = useAuthContext();
-
-//   const signup = async (email, password) => {
-//     setError(null);
-
-//     return createUserWithEmailAndPassword(auth, email, password)
-//       .then((res) => {
-//         dispatch({ type: "LOGIN", payload: res.user });
-//         console.log("user signed up", res.user);
-//       })
-//       .catch((err) => {
-//         setError(err.message);
-//       });
-//   };
-
-//   return { error, signup };
-// };
-
-// import { useEffect, useState } from "react";
-// import { auth } from "../firebase/config";
-// import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { auth, storage } from "../firebase/config";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";

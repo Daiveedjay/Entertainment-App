@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import showPassword from "../../../public/visibility-off.svg";
-import hidePassword from "../../../public/visibility-on.svg";
+import showPassword from "../../assests/visibility-off.svg";
+import hidePassword from "../../assests/visibility-on.svg";
 import "./Signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useSignup } from "../../hooks/useSignup";

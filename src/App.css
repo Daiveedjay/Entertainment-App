@@ -9,3 +9,12 @@
   background: var(--background-color);
   position: relative;
 }
+
+@media screen and (max-width: 50em) {
+  .App {
+    /* border: 2px solid red; */
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr;
+    padding: 2rem;
+  }
+}

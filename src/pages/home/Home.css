@@ -57,6 +57,7 @@
   overflow: hidden;
   transition: all ease-in 0.3s;
   cursor: pointer;
+  color: #fff;
 }
 
 .slider__item:hover .play__icon--container {
@@ -91,6 +92,8 @@
   font-size: 1.3rem;
   opacity: 75%;
   gap: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 .slider__details li:first-child {
@@ -191,10 +194,13 @@
   border: none;
   font-size: 1.8rem;
   transition: all ease-in-out 0.5s;
+  /* border: 2px solid #10141f; */
+  outline: 1.5px solid #10141f;
 }
 
 .show--more:hover {
   transform: translate(-50%, -3px);
+  /* background: none; */
 }
 
 .show--more:before {
@@ -228,4 +234,48 @@
 
 .recommended__section .large--text {
   padding: 2rem;
+}
+
+.search--error,
+.search--results {
+  font-size: 2rem;
+  padding: 2rem;
+}
+
+.search--error {
+  /* */
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  border-radius: 10px;
+  padding: 4rem;
+  overflow: hidden;
+  background: #fff;
+  color: #10141f;
+}
+
+.search--results span {
+  color: var(--error-color);
+  text-transform: capitalize;
+}
+
+.search--home {
+  font-size: 1.4rem;
+  border-radius: 10px;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  margin-bottom: 2rem;
+  display: inline-block;
+  color: #fff;
+  background: #5a698f;
+  cursor: pointer;
+}
+
+/* Under 800px */
+@media screen and (max-width: 50em) {
+  .utility__items--container {
+    padding-right: 0;
+  }
 }

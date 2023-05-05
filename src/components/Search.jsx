@@ -1,12 +1,15 @@
 import "./Search.css";
 
-import SearchIcon from "../../public/icon-search.svg";
+import SearchIcon from "../assests/icon-search.svg";
 import { useState } from "react";
 
-export default function Search() {
+// eslint-disable-next-line react/prop-types
+export default function Search({ onSearchResults }) {
   const [search, setSearch] = useState("");
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (search.length > 0) onSearchResults(search);
   };
 
   return (
@@ -21,6 +24,7 @@ export default function Search() {
           onChange={(e) => setSearch(e.target.value)}
           value={search}
         />
+        <button className="search--submit">Submit</button>
       </form>
     </div>
   );

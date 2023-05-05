@@ -14,6 +14,19 @@
   --sub-text-color: #999999;
   --primary-light: #fff;
   --error-color: #fc4747;
+  transition: all ease-in-out 0.25s;
+}
+
+/* LIGHT MODE CLASSES */
+.light {
+  --font-family-light: "Outfit-Light";
+  --font-family-medium: "Outfit-Medium";
+  --background-color: #f5f5f5;
+  --primary-color: #cbcbcb;
+  --sub-text-color: #777777;
+  --primary-light: #161d2f;
+  --error-color: #ff6666;
+  transition: all ease-in-out 0.25s;
 }
 
 html {
@@ -33,15 +46,15 @@ html {
 
 @font-face {
   font-family: "Outfit-Light";
-  src: url("/public/fonts/Outfit-Light.ttf") format("truetype"),
-    url("/public/fonts/Outfit-Light.ttf") format("truetype");
+  src: url("/src/assests/fonts/Outfit-Light.ttf") format("truetype"),
+    url("/src/assests/fonts/Outfit-Light.ttf") format("truetype");
   font-weight: light;
   font-style: normal;
 }
 @font-face {
   font-family: "Outfit-Medium";
-  src: url("/public/fonts/Outfit-Medium.ttf") format("truetype"),
-    url("/public/fonts/Outfit-Medium.ttf") format("truetype");
+  src: url("/src/assests/fonts/Outfit-Medium.ttf") format("truetype"),
+    url("/src/assests/fonts/Outfit-Medium.ttf") format("truetype");
   font-weight: medium;
   font-style: normal;
 }
@@ -85,4 +98,11 @@ input {
 input::placeholder {
   font-family: var(--font-family-light);
   font-size: 1.8rem;
+}
+
+/* Under 800px */
+@media screen and (max-width: 50em) {
+  html {
+    font-size: 50%; /* 8px per rem  */
+  }
 }

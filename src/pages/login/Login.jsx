@@ -1,9 +1,8 @@
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import showPassword from "../../../public/visibility-off.svg";
-import hidePassword from "../../../public/visibility-on.svg";
+import showPassword from "../../assests/visibility-off.svg";
+import hidePassword from "../../assests/visibility-on.svg";
 import { useState } from "react";
-// import { motion } from "framer-motion";
 import { useLogin } from "../../hooks/useLogin";
 
 export default function Login() {

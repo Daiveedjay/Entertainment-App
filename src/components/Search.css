@@ -2,6 +2,7 @@
   /* border: 2px solid red; */
   background: var(--primary-color);
   border-radius: 10px;
+  width: 98%;
   /* margin-top: 2rem; */
 }
 
@@ -28,8 +29,33 @@
   font-size: 1.8rem;
 }
 
+.search__form input:focus {
+  outline-color: #5a698f;
+  border-radius: 3px;
+}
+
 .search__form input::placeholder {
   font-family: var(--font-family-light);
   font-size: 1.8rem;
   color: var(--sub-text-color);
+}
+
+.search--submit {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  padding: 1rem 2rem;
+  background: none;
+  color: #fff;
+  background: #5a698f;
+  border: 2px solid var(--primary-light);
+  border: none;
+  border-radius: 10px;
+}
+/* Under 800px */
+@media screen and (max-width: 50em) {
+  .search__component {
+    width: 100%;
+  }
 }
