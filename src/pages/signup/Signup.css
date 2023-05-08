@@ -93,10 +93,3 @@ h1 {
     font-size: 2.5rem;
   }
 }
-
-/* Under 350px */
-@media screen and (max-width: 21.875em) {
-  .signup__section {
-    /* max-width: 30rem; */
-  }
-}
