@@ -102,10 +102,14 @@ input::placeholder {
   font-size: 1.8rem;
 }
 
+.header--alignment {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* Under 800px */
 @media screen and (max-width: 50em) {
   html {
     font-size: 50%; /* 8px per rem  */
   }
 }
-/* Under 500px */

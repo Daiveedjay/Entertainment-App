@@ -238,10 +238,8 @@ function Movies() {
                           onClick={() => {
                             if (bookmarkedItems.includes(dataItem.id)) {
                               removeBookmark(dataItem.id);
-                             
                             } else {
                               addBookmark(dataItem);
-                              
                             }
                           }}
                         >
