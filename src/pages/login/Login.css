@@ -422,6 +422,7 @@ h1 {
 @media screen and (max-width: 31.25em) {
   .login__section {
     gap: 3rem;
+    width: 90%;
   }
   .email span,
   .password span,
