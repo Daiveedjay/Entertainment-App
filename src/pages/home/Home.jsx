@@ -12,7 +12,6 @@ import withPageTransition from "../../context/withPageTransitions";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 
-
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
@@ -40,7 +39,7 @@ function Home() {
       setClearError(false);
     }
   };
-  const { bookmarkMedia, deleteBookmark, response } = useFirestore("bookmarks");
+  const { bookmarkMedia, deleteBookmark } = useFirestore("bookmarks");
 
   const [bookmarkedItems, setBookmarkedItems] = useState([]);
 
@@ -118,8 +117,6 @@ function Home() {
       },
     }),
   };
-
-  console.log(response);
 
   return (
     <div>
@@ -202,10 +199,8 @@ function Home() {
                     onClick={() => {
                       if (bookmarkedItems.includes(data.id)) {
                         removeBookmark(data.id);
-                        console.log("Deleted button Clicked");
                       } else {
                         addBookmark(data);
-                        console.log("Bookmark button Clicked");
                       }
                     }}
                   >
@@ -227,7 +222,7 @@ function Home() {
       ) : (
         <>
           <section className="trending__section section--spacing">
-            <div className="header--spacing">
+            <div className="header--alignment header--spacing">
               <h2 className=" large--text">Trending</h2>
               <div className="display__info--container">
                 <h2 className="display--name">
@@ -285,10 +280,8 @@ function Home() {
                         onClick={() => {
                           if (bookmarkedItems.includes(dataItem.id)) {
                             removeBookmark(dataItem.id);
-                            console.log("Deleted button Clicked");
                           } else {
                             addBookmark(dataItem);
-                            console.log("Bookmark button Clicked");
                           }
                         }}
                       >
@@ -362,10 +355,8 @@ function Home() {
                             onClick={() => {
                               if (bookmarkedItems.includes(dataItem.id)) {
                                 removeBookmark(dataItem.id);
-                                console.log("Deleted button Clicked");
                               } else {
                                 addBookmark(dataItem);
-                                console.log("Bookmark button Clicked");
                               }
                             }}
                           >

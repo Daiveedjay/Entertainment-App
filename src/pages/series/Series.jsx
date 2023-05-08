@@ -73,8 +73,6 @@ function Series() {
       const dataID = dataItem.id;
       const dataCategory = dataItem.category;
 
-      console.log(dataID);
-
       await bookmarkMedia(dataID, dataCategory, user.uid);
       setBookmarkedItems([...bookmarkedItems, dataItem.id]);
 
@@ -165,10 +163,8 @@ function Series() {
                       onClick={() => {
                         if (bookmarkedItems.includes(data.id)) {
                           removeBookmark(data.id);
-                          console.log("Deleted button Clicked");
                         } else {
                           addBookmark(data);
-                          console.log("Bookmark button Clicked");
                         }
                       }}
                     >
@@ -189,7 +185,7 @@ function Series() {
         </AnimationContainer>
       ) : (
         <section className="series__section section--spacing">
-          <div className=" header--spacing">
+          <div className=" header--spacing header--alignment">
             <h2 className=" large--text">Tv Series</h2>
             <div className="display__info--container">
               <h2 className="display--name">
@@ -243,10 +239,8 @@ function Series() {
                           onClick={() => {
                             if (bookmarkedItems.includes(dataItem.id)) {
                               removeBookmark(dataItem.id);
-                              console.log("Deleted button Clicked");
                             } else {
                               addBookmark(dataItem);
-                              console.log("Bookmark button Clicked");
                             }
                           }}
                         >

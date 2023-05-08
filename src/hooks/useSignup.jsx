@@ -14,7 +14,6 @@ export const useSignup = () => {
   const signup = async (email, password, displayName, thumbnail) => {
     setError(null);
     setIsPending(true);
-    console.log("User thumbnail in useSignUp", thumbnail); // Set isPending to true before the asynchronous call
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);

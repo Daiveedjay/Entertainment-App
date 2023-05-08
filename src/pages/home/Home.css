@@ -350,3 +350,16 @@
   font-size: 1.6rem;
   width: max-content;
 }
+
+@media screen and (max-width: 31.25em) {
+  .header--alignment {
+    flex-direction: column-reverse;
+    display: flex;
+  }
+  .header--alignment .large--text {
+    align-self: flex-start;
+  }
+  .header--alignment .display__info--container {
+    align-self: flex-end;
+  }
+}

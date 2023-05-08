@@ -20,7 +20,6 @@ export const useLogout = () => {
         setIsPending(false);
         setError(null);
       }
-      console.log("user signed out");
     } catch (err) {
       if (!isCancelled) {
         console.log(err.message);

@@ -41,9 +41,7 @@ export default function Sidebar() {
 
   const { changeMode, mode } = useTheme();
   const toggleMode = () => {
-    console.log("before", mode);
     changeMode(mode === "dark" ? "light" : "dark");
-    console.log("after", mode);
   };
 
   const navLinks = [

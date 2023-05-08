@@ -22,14 +22,12 @@ function Signup() {
   const [displayName, setDisplayName] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
   const [thumbnailError, setThumbnailError] = useState(null);
-  // console.log(thumbnail);
 
   const [emailError, setEmailError] = useState(null);
 
   const handleFileChange = (e) => {
     setThumbnail(null);
     let selected = e.target.files[0];
-    // console.log(selected);
 
     if (!selected) {
       setThumbnailError("Please select a file");
@@ -56,8 +54,6 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password, displayName);
-    console.log("User thumbnail in useSignUp", thumbnail);
 
     try {
       const methods = await fetchSignInMethodsForEmail(auth, email);

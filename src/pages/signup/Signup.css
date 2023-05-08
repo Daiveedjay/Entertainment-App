@@ -82,9 +82,21 @@ h1 {
   width: max-content;
 }
 
+@media screen and (max-width: 31.25em) {
+  .signup__section {
+    width: 90%;
+  }
+
+  .email--input,
+  .password--input,
+  .display--input {
+    font-size: 2.5rem;
+  }
+}
+
 /* Under 350px */
 @media screen and (max-width: 21.875em) {
   .signup__section {
-    max-width: 30rem;
+    /* max-width: 30rem; */
   }
 }

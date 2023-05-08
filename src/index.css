@@ -109,8 +109,3 @@ input::placeholder {
   }
 }
 /* Under 500px */
-@media screen and (max-width: 31.25em) {
-  html {
-    font-size: 37.5%; /* 6px per rem  */
-  }
-}
