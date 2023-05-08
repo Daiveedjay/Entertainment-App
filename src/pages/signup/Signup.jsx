@@ -3,7 +3,7 @@ import { useState } from "react";
 import showPassword from "../../assests/visibility-off.svg";
 import hidePassword from "../../assests/visibility-on.svg";
 import UploadIcon from "../../assests/upload.svg";
-
+import "./Signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useSignup } from "../../hooks/useSignup";
 import { fetchSignInMethodsForEmail } from "firebase/auth";
