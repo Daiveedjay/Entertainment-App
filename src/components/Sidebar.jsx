@@ -14,11 +14,9 @@ import ManageIcon from "../assests/manage-account.svg";
 import ManageIconActive from "../assests/manage-account-active.svg";
 import ToggleOnIcon from "../assests/toggle-on.svg";
 import ToggleOffIcon from "../assests/toggle-off.svg";
-// import SunIcon from "../assests/sun-solid.svg";
-// import MoonIcon from "../assests/moon-solid.svg";
 import LogoutIcon from "../assests/logout.svg";
 
-import { NavLink, useMatch } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useLogout } from "../hooks/useLogout";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +25,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useTheme } from "../hooks/useTheme";
 
 export default function Sidebar() {
+  const location = useLocation();
   const { user } = useAuthContext();
   const { logout } = useLogout();
 
@@ -47,34 +46,58 @@ export default function Sidebar() {
     console.log("after", mode);
   };
 
+  const navLinks = [
+    {
+      path: "/",
+      title: "Home",
+      activeIcon: HomeActive,
+      inactiveIcon: HomeIcon,
+    },
+    {
+      path: "/movies",
+      title: "Movies",
+      activeIcon: MovieLight,
+      inactiveIcon: MovieIcon,
+    },
+    {
+      path: "/series",
+      title: "TV Series",
+      activeIcon: SeriesLight,
+      inactiveIcon: SeriesIcon,
+    },
+    {
+      path: "/bookmarks",
+      title: "Bookmarks",
+      activeIcon: BookmarkLight,
+      inactiveIcon: Bookmark,
+    },
+  ];
+
   return (
     <aside className="sidebar__container">
-      <NavLink to="/" className="sidebar__logo">
+      <NavLink to="/" className="sidebar__logo" title="Logo">
         <img src={Logo} alt="" />
       </NavLink>
       <div className="sidebar__nav">
-        <NavLink to="/" className="sidebar__nav-item">
-          <img src={useMatch({ path: "/" }) ? HomeActive : HomeIcon} alt="" />
-        </NavLink>
-        <NavLink to="/movies" className="sidebar__nav-item">
-          <img
-            src={useMatch({ path: "/movies" }) ? MovieLight : MovieIcon}
-            alt=""
-          />
-        </NavLink>
-        <NavLink to="/series" className="sidebar__nav-item">
-          <img
-            src={useMatch({ path: "/series" }) ? SeriesLight : SeriesIcon}
-            alt=""
-          />
-        </NavLink>
-        <NavLink to="/bookmarks" className="sidebar__nav-item">
-          <img
-            src={useMatch({ path: "/bookmarks" }) ? BookmarkLight : Bookmark}
-            alt=""
-          />
-        </NavLink>
+        {navLinks.map((link, index) => (
+          <NavLink
+            key={index}
+            to={link.path}
+            className="sidebar__nav-item"
+            title={link.title}
+          >
+            <img
+              src={
+                link.path === location.pathname
+                  ? link.activeIcon
+                  : link.inactiveIcon
+              }
+              alt=""
+            />
+          </NavLink>
+        ))}
       </div>
+
       <div className="sidebar__functionalities">
         <img
           onClick={toggleSettings}
@@ -105,7 +128,7 @@ export default function Sidebar() {
         )}
       </div>
 
-      <div className="account__image">
+      <div className="account__image sidebar--image">
         <img src={user.photoURL} alt="" />
       </div>
     </aside>

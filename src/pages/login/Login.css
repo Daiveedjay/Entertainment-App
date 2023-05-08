@@ -7,7 +7,7 @@
   flex-direction: column;
   gap: 2rem;
   background-color: var(--primary-color);
-  width: 40rem;
+  min-width: 50rem;
   padding: 2rem 3rem;
   padding-bottom: 2.5rem;
   border-radius: 10px;
@@ -55,7 +55,6 @@ h1 {
 .display--input:focus {
   outline: none;
   caret-color: #fff;
-  /* border: none; */
 }
 .email--input:focus ~ span,
 .password--input:focus ~ span,
@@ -416,5 +415,46 @@ h1 {
 
   100% {
     transform: translate(100%, 100%);
+  }
+}
+
+/* Under 500px */
+@media screen and (max-width: 31.25em) {
+  .login__section {
+    gap: 3rem;
+  }
+  .email span,
+  .password span,
+  .display__name span {
+    font-size: 2rem;
+  }
+
+  .email--input:focus ~ span,
+  .password--input:focus ~ span,
+  .display--input:focus ~ span,
+  .email--input.has-value ~ span,
+  .password--input.has-value ~ span,
+  .display--input.has-value ~ span {
+    font-size: 1.8rem;
+  }
+
+  .email--input.has-value ~ span,
+  .password--input.has-value ~ span {
+    font-size: 1.8rem;
+  }
+
+  .submit {
+    font-size: 2rem !important;
+  }
+
+  .sign-in-route {
+    font-size: 1.8rem;
+  }
+}
+
+/* Under 350px */
+@media screen and (max-width: 21.875em) {
+  .login__section {
+    min-width: 45rem;
   }
 }

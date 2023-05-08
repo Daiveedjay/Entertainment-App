@@ -1,13 +1,10 @@
 .search__component {
-  /* border: 2px solid red; */
   background: var(--primary-color);
   border-radius: 10px;
   width: 98%;
-  /* margin-top: 2rem; */
 }
 
 .search__form {
-  /* border: 2px solid green; */
   position: relative;
 }
 .search--icon {
@@ -57,5 +54,17 @@
 @media screen and (max-width: 50em) {
   .search__component {
     width: 100%;
+  }
+}
+
+/* Under 500px */
+@media screen and (max-width: 31.25em) {
+  .search__component {
+    border-radius: 0;
+    padding: 1rem;
+  }
+
+  .search--submit {
+    font-size: 1.5rem;
   }
 }

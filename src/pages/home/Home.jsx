@@ -1,26 +1,30 @@
+/* eslint-disable react-refresh/only-export-components */
 import Search from "../../components/Search";
 import "./Home.css";
 import data from "../../data.json";
 import bookmarkIcon from "../../assests/icon-bookmark-empty.svg";
 import bookmarkDone from "../../assests/icon-bookmark-full.svg";
-import movieIcon from "../../assests/icon-nav-movies-light.svg";
-import seriesIcon from "../../assests/icon-nav-tv-series-light.svg";
+import movieIcon from "../../assests/icon-nav-movies-light-theme.svg";
+import seriesIcon from "../../assests/icon-nav-tv-series-light-theme.svg";
 import playIcon from "../../assests/icon-play.svg";
 import { useState, useEffect } from "react";
-
+import withPageTransition from "../../context/withPageTransitions";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
+
 
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 import { useSearch } from "../../hooks/useSearch";
 import { NavLink } from "react-router-dom";
+import AnimationContainer from "../../components/AnimationContainer";
+import AnimationItem from "../../components/AnimationItem";
+import { motion, AnimatePresence } from "framer-motion";
 
-export default function Home() {
+function Home() {
   const [clearError, setClearError] = useState(false);
   const { searchFunc, filteredData, error } = useSearch();
-  console.log("Home", filteredData);
 
   const [searchResults, setSearchResults] = useState([]);
 
@@ -42,6 +46,9 @@ export default function Home() {
 
   const [showMore, setShowMore] = useState(false);
 
+  const [textBoxMessage, setTextBoxMessage] = useState("");
+  const [textBoxVisible, setTextBoxVisible] = useState(false);
+
   const { user } = useAuthContext();
 
   useEffect(() => {
@@ -55,10 +62,9 @@ export default function Home() {
         const bookmarksSnapshot = await getDocs(bookmarksQuery);
 
         const existingBookmarks = bookmarksSnapshot.docs.map((doc) => {
-          // console.log(doc);
           return { ...doc.data() };
         });
-        // console.log(existingBookmarks);
+
         setBookmarkedItems(
           existingBookmarks.map((bookmark) => bookmark.dataID)
         );
@@ -73,18 +79,44 @@ export default function Home() {
       const dataID = dataItem.id;
       const dataCategory = dataItem.category;
 
-      // console.log(dataID);
-
       await bookmarkMedia(dataID, dataCategory, user.uid);
       setBookmarkedItems([...bookmarkedItems, dataItem.id]);
 
       setBookmarkedItems((prevBookmark) => [...prevBookmark, bookmarkedItems]);
+
+      setTextBoxMessage(`${dataItem.title} was added to your bookmarks.`);
+      setTextBoxVisible(true);
+      setTimeout(() => {
+        setTextBoxVisible(false);
+      }, 3000);
     }
   };
 
   const removeBookmark = async (dataID) => {
+    const dataItem = data.find((item) => item.id === dataID);
     await deleteBookmark(dataID);
     setBookmarkedItems(bookmarkedItems.filter((id) => id !== dataID));
+
+    if (dataItem) {
+      setTextBoxMessage(`${dataItem.title} was removed from your bookmarks.`);
+      setTextBoxVisible(true);
+      setTimeout(() => {
+        setTextBoxVisible(false);
+      }, 4000);
+    }
+  };
+  const slideIn = {
+    hidden: { x: 100, opacity: 0 },
+    visible: (index) => ({
+      x: 0,
+      opacity: 1,
+      transition: {
+        delay: index * 0.1,
+        duration: 0.5,
+        type: "spring",
+        ease: "easeInOut",
+      },
+    }),
   };
 
   console.log(response);
@@ -92,6 +124,19 @@ export default function Home() {
   return (
     <div>
       <Search onSearchResults={handleSearchResults} />
+      <AnimatePresence>
+        {textBoxVisible && (
+          <motion.div
+            className="bookmark--message"
+            initial={{ x: "-50%", y: "-100%", opacity: 0 }}
+            animate={{ x: "-50%", y: 0, opacity: 1 }}
+            exit={{ y: "-100%", opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, bounce: 2 }}
+          >
+            {textBoxMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
       {searchResults.length > 0 && !error && (
         <div className="search--results">
           Your search for <span>{searchResults}</span> came back with a total of{" "}
@@ -121,68 +166,77 @@ export default function Home() {
         </NavLink>
       )}
       {filteredData && filteredData.length > 0 ? (
-        <div className="utility__items--container">
-          {filteredData.map((data) => (
-            <div className="utility__item" key={data.id}>
-              <div className="utility__image--container">
-                <img
-                  className="utility__image"
-                  src={data.thumbnail[1]}
-                  alt={data.title}
-                />
-                <div className="play__icon--container">
-                  <img className="play__icon" src={playIcon} alt="" />
-                  <span>Play</span>
-                </div>
-              </div>
-              <div className="utility__item--details">
-                <span>{data.year}</span>
-                <span>
-                  <img
-                    src={data.category === "Movie" ? movieIcon : seriesIcon}
-                    alt=""
-                  />
-                  {data.category}
-                </span>
-                <span>{data.rating}</span>
-              </div>
-              <div className="utility__item--title small--text">
-                {data.title}
-              </div>
+        <AnimationContainer>
+          <div className="utility__items--container">
+            {filteredData.map((data) => (
+              <AnimationItem key={data.id}>
+                <div className="utility__item" key={data.id}>
+                  <div className="utility__image--container">
+                    <img
+                      className="utility__image"
+                      src={data.thumbnail[1]}
+                      alt={data.title}
+                    />
+                    <div className="play__icon--container">
+                      <img className="play__icon" src={playIcon} alt="" />
+                      <span>Play</span>
+                    </div>
+                  </div>
+                  <div className="utility__item--details">
+                    <span>{data.year}</span>
+                    <span>
+                      <img
+                        src={data.category === "Movie" ? movieIcon : seriesIcon}
+                        alt=""
+                      />
+                      {data.category}
+                    </span>
+                    <span>{data.rating}</span>
+                  </div>
+                  <div className="utility__item--title small--text">
+                    {data.title}
+                  </div>
 
-              <div
-                className="bookmark__icon--container"
-                onClick={() => {
-                  if (bookmarkedItems.includes(data.id)) {
-                    removeBookmark(data.id);
-                    console.log("Deleted button Clicked");
-                  } else {
-                    addBookmark(data);
-                    console.log("Bookmark button Clicked");
-                  }
-                }}
-              >
-                <img
-                  className="bookmark__icon"
-                  src={
-                    bookmarkedItems.includes(data.id)
-                      ? bookmarkDone
-                      : bookmarkIcon
-                  }
-                  alt=""
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+                  <div
+                    className="bookmark__icon--container"
+                    onClick={() => {
+                      if (bookmarkedItems.includes(data.id)) {
+                        removeBookmark(data.id);
+                        console.log("Deleted button Clicked");
+                      } else {
+                        addBookmark(data);
+                        console.log("Bookmark button Clicked");
+                      }
+                    }}
+                  >
+                    <img
+                      className="bookmark__icon"
+                      src={
+                        bookmarkedItems.includes(data.id)
+                          ? bookmarkDone
+                          : bookmarkIcon
+                      }
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </AnimationItem>
+            ))}
+          </div>
+        </AnimationContainer>
       ) : (
         <>
           <section className="trending__section section--spacing">
             <div className="header--spacing">
               <h2 className=" large--text">Trending</h2>
-              <h2 className="large--text display--name">
-                What&apos;s good, {user.displayName} ?
-              </h2>
+              <div className="display__info--container">
+                <h2 className="display--name">
+                  What&apos;s good, {user.displayName} ?
+                </h2>
+                <div className="account__image--home">
+                  <img src={user.photoURL} alt="" />
+                </div>
+              </div>
             </div>
 
             <div className="trending__slider">
@@ -190,7 +244,14 @@ export default function Home() {
                 data
                   .filter((dataItem) => dataItem.isTrending)
                   .map((dataItem, index) => (
-                    <div className="slider__item" key={index}>
+                    <motion.div
+                      className="slider__item"
+                      key={index}
+                      initial="hidden"
+                      custom={index}
+                      animate="visible"
+                      variants={slideIn}
+                    >
                       <img
                         className="slider--image"
                         src={dataItem.thumbnail[1]}
@@ -214,6 +275,9 @@ export default function Home() {
                           <p className="slider__rating">{dataItem.rating}</p>
                         </div>
                         <h2 className="medium--text">{dataItem.title}</h2>
+                        <p className="slider__rating tablet--rating">
+                          {dataItem.rating}
+                        </p>
                       </div>
 
                       <div
@@ -243,222 +307,95 @@ export default function Home() {
                         <img className="play__icon" src={playIcon} alt="" />
                         <span>Play</span>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
             </div>
           </section>
           <section className="recommended__section section--spacing">
             <h2 className=" large--text">Recommended for you</h2>
 
-            <div className="utility__items--container">
-              {data &&
-                data
-                  .filter((dataItem) => dataItem.isTrending === false)
-                  .filter((_, index) => showMore || index < 12)
-                  .map((dataItem, index) => (
-                    <div className="utility__item" key={index}>
-                      <div className="utility__image--container">
-                        <img
-                          className="utility__image"
-                          src={dataItem.thumbnail[1]}
-                          alt={dataItem.title}
-                        />
-                        <div className="play__icon--container">
-                          <img className="play__icon" src={playIcon} alt="" />
-                          <span>Play</span>
-                        </div>
-                      </div>
-                      <div className="utility__item--details">
-                        <span>{dataItem.year}</span>
-                        <span>
-                          <img
-                            src={
-                              dataItem.category === "Movie"
-                                ? movieIcon
-                                : seriesIcon
-                            }
-                            alt=""
-                          />
-                          {dataItem.category}
-                        </span>
-                        <span>{dataItem.rating}</span>
-                      </div>
-                      <div className="utility__item--title small--text">
-                        {dataItem.title}
-                      </div>
+            <AnimationContainer>
+              <div className="utility__items--container">
+                {data &&
+                  data
+                    .filter((dataItem) => dataItem.isTrending === false)
+                    .filter((_, index) => showMore || index < 12)
+                    .map((dataItem, index) => (
+                      <AnimationItem key={index}>
+                        <div className="utility__item" key={index}>
+                          <div className="utility__image--container">
+                            <img
+                              className="utility__image"
+                              src={dataItem.thumbnail[1]}
+                              alt={dataItem.title}
+                            />
+                            <div className="play__icon--container">
+                              <img
+                                className="play__icon"
+                                src={playIcon}
+                                alt=""
+                              />
+                              <span>Play</span>
+                            </div>
+                          </div>
+                          <div className="utility__item--details">
+                            <span>{dataItem.year}</span>
+                            <span>
+                              <img
+                                src={
+                                  dataItem.category === "Movie"
+                                    ? movieIcon
+                                    : seriesIcon
+                                }
+                                alt=""
+                              />
+                              {dataItem.category}
+                            </span>
+                            <span>{dataItem.rating}</span>
+                          </div>
+                          <div className="utility__item--title small--text">
+                            {dataItem.title}
+                          </div>
 
-                      <div
-                        className="bookmark__icon--container"
-                        onClick={() => {
-                          if (bookmarkedItems.includes(dataItem.id)) {
-                            removeBookmark(dataItem.id);
-                            console.log("Deleted button Clicked");
-                          } else {
-                            addBookmark(dataItem);
-                            console.log("Bookmark button Clicked");
-                          }
-                        }}
-                      >
-                        <img
-                          className="bookmark__icon"
-                          src={
-                            bookmarkedItems.includes(dataItem.id)
-                              ? bookmarkDone
-                              : bookmarkIcon
-                          }
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                  ))}
-              <button
-                onClick={() => setShowMore(!showMore)}
-                className="show--more"
-              >
-                {showMore ? "See Less" : "See More"}
-              </button>
-            </div>
+                          <div
+                            className="bookmark__icon--container"
+                            onClick={() => {
+                              if (bookmarkedItems.includes(dataItem.id)) {
+                                removeBookmark(dataItem.id);
+                                console.log("Deleted button Clicked");
+                              } else {
+                                addBookmark(dataItem);
+                                console.log("Bookmark button Clicked");
+                              }
+                            }}
+                          >
+                            <img
+                              className="bookmark__icon"
+                              src={
+                                bookmarkedItems.includes(dataItem.id)
+                                  ? bookmarkDone
+                                  : bookmarkIcon
+                              }
+                              alt=""
+                            />
+                          </div>
+                        </div>
+                      </AnimationItem>
+                    ))}
+                <button
+                  onClick={() => setShowMore(!showMore)}
+                  className="show--more"
+                >
+                  {showMore ? "See Less" : "See More"}
+                </button>
+              </div>
+            </AnimationContainer>
           </section>
         </>
       )}
-
-      {/* <section className="trending__section section--spacing">
-        <div className="header--spacing">
-          <h2 className=" large--text">Trending</h2>
-          <h2 className="large--text display--name">
-            What&apos;s good, {user.displayName} ?
-          </h2>
-        </div>
-
-        <div className="trending__slider">
-          {data &&
-            data
-              .filter((dataItem) => dataItem.isTrending)
-              .map((dataItem, index) => (
-                <div className="slider__item" key={index}>
-                  <img
-                    className="slider--image"
-                    src={dataItem.thumbnail[1]}
-                    alt=""
-                  />
-                  <div className="slider__details__container">
-                    <div className="slider__details">
-                      <p className="slider__year">{dataItem.year}</p>
-                      <div className="slider__category">
-                        <img
-                          src={
-                            dataItem.category === "Movie"
-                              ? movieIcon
-                              : seriesIcon
-                          }
-                          alt=""
-                        />
-                        <p>{dataItem.category}</p>
-                      </div>
-
-                      <p className="slider__rating">{dataItem.rating}</p>
-                    </div>
-                    <h2 className="medium--text">{dataItem.title}</h2>
-                  </div>
-
-                  <div
-                    className="bookmark__icon--container"
-                    onClick={() => {
-                      if (bookmarkedItems.includes(dataItem.id)) {
-                        removeBookmark(dataItem.id);
-                        console.log("Deleted button Clicked");
-                      } else {
-                        addBookmark(dataItem);
-                        console.log("Bookmark button Clicked");
-                      }
-                    }}
-                  >
-                    <img
-                      className="bookmark__icon"
-                      src={
-                        bookmarkedItems.includes(dataItem.id)
-                          ? bookmarkDone
-                          : bookmarkIcon
-                      }
-                      alt=""
-                    />
-                  </div>
-
-                  <div className="play__icon--container">
-                    <img className="play__icon" src={playIcon} alt="" />
-                    <span>Play</span>
-                  </div>
-                </div>
-              ))}
-        </div>
-      </section>
-      <section className="recommended__section section--spacing">
-        <h2 className=" large--text">Recommended for you</h2>
-
-        <div className="utility__items--container">
-          {data &&
-            data
-              .filter((dataItem) => dataItem.isTrending === false)
-              .filter((_, index) => showMore || index < 12)
-              .map((dataItem, index) => (
-                <div className="utility__item" key={index}>
-                  <div className="utility__image--container">
-                    <img
-                      className="utility__image"
-                      src={dataItem.thumbnail[1]}
-                      alt={dataItem.title}
-                    />
-                    <div className="play__icon--container">
-                      <img className="play__icon" src={playIcon} alt="" />
-                      <span>Play</span>
-                    </div>
-                  </div>
-                  <div className="utility__item--details">
-                    <span>{dataItem.year}</span>
-                    <span>
-                      <img
-                        src={
-                          dataItem.category === "Movie" ? movieIcon : seriesIcon
-                        }
-                        alt=""
-                      />
-                      {dataItem.category}
-                    </span>
-                    <span>{dataItem.rating}</span>
-                  </div>
-                  <div className="utility__item--title small--text">
-                    {dataItem.title}
-                  </div>
-
-                  <div
-                    className="bookmark__icon--container"
-                    onClick={() => {
-                      if (bookmarkedItems.includes(dataItem.id)) {
-                        removeBookmark(dataItem.id);
-                        console.log("Deleted button Clicked");
-                      } else {
-                        addBookmark(dataItem);
-                        console.log("Bookmark button Clicked");
-                      }
-                    }}
-                  >
-                    <img
-                      className="bookmark__icon"
-                      src={
-                        bookmarkedItems.includes(dataItem.id)
-                          ? bookmarkDone
-                          : bookmarkIcon
-                      }
-                      alt=""
-                    />
-                  </div>
-                </div>
-              ))}
-          <button onClick={() => setShowMore(!showMore)} className="show--more">
-            {showMore ? "See Less" : "See More"}
-          </button>
-        </div>
-      </section> */}
     </div>
   );
 }
+
+// eslint-disable-next-line react-refresh/only-export-components
+export default withPageTransition(Home);

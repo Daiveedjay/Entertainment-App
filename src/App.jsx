@@ -25,40 +25,6 @@ function App() {
 
   const { mode } = useTheme();
 
-  // if (!authIsReady)
-  //   return (
-  //     <div className="loading__container">
-  //       <div className="loading">
-  //         <div className=" boxes">
-  //           <div className="box">
-  //             <div></div>
-  //             <div></div>
-  //             <div></div>
-  //             <div></div>
-  //           </div>
-  //           <div className="box">
-  //             <div></div>
-  //             <div></div>
-  //             <div></div>
-  //             <div></div>
-  //           </div>
-  //           <div className="box">
-  //             <div></div>
-  //             <div></div>
-  //             <div></div>
-  //             <div></div>
-  //           </div>
-  //           <div className="box">
-  //             <div></div>
-  //             <div></div>
-  //             <div></div>
-  //             <div></div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-
   return (
     <div className={`App ${mode}`}>
       {authIsReady && (
@@ -85,34 +51,6 @@ function AppRoutes({ user }) {
   const path = location.pathname;
   const showSidebar = path !== "/login" && path !== "/signup" && user !== null;
 
-  // if (user === undefined) return <div>Loading...</div>;
-
-  // return (
-  //   <>
-  //     {user && showSidebar && <Sidebar />}
-  //     <Routes location={location} key={location.key}>
-  //       <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
-  //       <Route
-  //         path="/bookmarks"
-  //         element={user ? <Bookmarks /> : <Navigate to="/login" />}
-  //       />
-  //       <Route
-  //         path="/movies"
-  //         element={user ? <Movies /> : <Navigate to="/login" />}
-  //       />
-  //       <Route
-  //         path="/series"
-  //         element={user ? <Series /> : <Navigate to="/login" />}
-  //       />
-  //       <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-  //       <Route
-  //         path="/signup"
-  //         element={user ? <Navigate to="/" /> : <Signup />}
-  //       />
-  //       <Route path="*" element={<Navigate to={user ? "/" : "/login"} />} />
-  //     </Routes>
-  //   </>
-  // );
   return (
     <>
       {showSidebar && <Sidebar />}
@@ -138,26 +76,3 @@ function AppRoutes({ user }) {
 }
 
 export default App;
-
-// TODO -.-
-
-// return (
-//   <>
-//     {showSidebar && <Sidebar />}
-//     <Routes location={location} key={location.key}>
-//       {user && (
-//         <>
-//           <Route path="/" element={<Home />} />
-//           <Route path="/bookmarks" element={<Bookmarks />} />
-//           <Route path="/movies" element={<Movies />} />
-//           <Route path="/series" element={<Series />} />
-//           <Route path="*" element={<Navigate to="/" />} />
-//         </>
-//       )}
-
-//       <Route path="/login" element={<Login />} />
-//       <Route path="/signup" element={<Signup />} />
-//       {/* <Route path="*" element={<Navigate to="/login" />} /> */}
-//     </Routes>
-//   </>
-// );

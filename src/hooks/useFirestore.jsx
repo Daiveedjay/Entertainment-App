@@ -9,7 +9,7 @@ import {
   query,
   getDocs,
 } from "firebase/firestore";
-
+import { serverTimestamp } from "firebase/firestore";
 let initialState = {
   document: null,
   isPending: false,
@@ -79,7 +79,12 @@ export const useFirestore = (collectionName) => {
 
       if (existingBookmarkSnapshot.empty) {
         // Add document if the bookmark doesn't exist
-        const addedDocument = await addDoc(ref, { dataID, dataCategory, uid });
+        const addedDocument = await addDoc(ref, {
+          dataID,
+          dataCategory,
+          uid,
+          timestamp: serverTimestamp(),
+        });
         dispatchIfNotCancelled({
           type: "ADDED_DOCUMENT",
           payload: addedDocument,

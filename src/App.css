@@ -12,9 +12,15 @@
 
 @media screen and (max-width: 50em) {
   .App {
-    /* border: 2px solid red; */
     grid-template-columns: 1fr;
     grid-template-rows: min-content 1fr;
     padding: 2rem;
+  }
+}
+
+/* Under 500px */
+@media screen and (max-width: 31.25em) {
+  .App {
+    padding: 2rem 0;
   }
 }

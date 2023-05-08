@@ -5,6 +5,10 @@
   padding-right: 3rem;
 }
 
+.bookmarks--header {
+  padding: 2rem 0 1rem 3rem;
+}
+
 .bookmarks__items--container {
   margin-bottom: 3rem;
 }
@@ -12,4 +16,22 @@
 .bookmarks__items--container .utility__image {
   height: 30rem;
   object-fit: cover;
+}
+
+/* Under 800px */
+@media screen and (max-width: 50em) {
+  .bookmarks__items--container {
+    padding-right: 0;
+  }
+}
+
+/* Under 500px */
+@media screen and (max-width: 31.25em) {
+  .header--spacing {
+    padding: 2rem;
+  }
+
+  .bookmarks__items--container {
+    padding: 1rem 3rem;
+  }
 }
