@@ -338,7 +338,7 @@
 }
 
 .bookmark--message {
-  position: fixed;
+  position: sticky;
   top: 50px;
   left: 50%;
   transform: translateX(-50%);
