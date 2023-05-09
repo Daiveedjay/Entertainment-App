@@ -173,7 +173,7 @@ function Signup() {
           />
           {thumbnailError && <p className="error">{thumbnailError}</p>}
           <label className="avatar--label" htmlFor="file">
-            Uplaod your Avatar{" "}
+            Upload your Avatar{" "}
             <img className="upload--icon" src={UploadIcon} alt="" />
           </label>
         </div>
