@@ -122,17 +122,17 @@ function Home() {
     <div>
       <Search onSearchResults={handleSearchResults} />
       <AnimatePresence>
-        {
+        {textBoxVisible && (
           <motion.div
             className="bookmark--message"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, bounce: 2 }}
+            initial={{ x: "-50%", y: "-100%", opacity: 0 }}
+            animate={{ x: "-50%", y: 0, opacity: 1 }}
+            exit={{ y: "-100%", opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, bounce: 3 }}
           >
             {textBoxMessage}
           </motion.div>
-        }
+        )}
       </AnimatePresence>
       {searchResults.length > 0 && !error && (
         <div className="search--results">
